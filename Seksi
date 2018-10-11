@@ -1,0 +1,60 @@
+private RecyclerView RV_Seksi;
+    SwipeRefreshLayout Rafresh;
+    Retrofit retrofit;
+    ApiSeksi apiSeksi;
+    String NamaBidang,NamaSub;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.seksi);
+        SharedPreferences sharedPreferences = getSharedPreferences("login", Context.MODE_PRIVATE);
+        NamaSub= sharedPreferences.getString("Nama","");
+        if (NamaSub.equals("spkp") || NamaSub.equals("spip") || NamaSub.equals("spmk")){
+            NamaBidang = "ikp";
+        }
+        RV_Seksi = findViewById(R.id.RV_Seksi);
+        Rafresh = findViewById(R.id.RafreshSeksi);
+        retrofit = new Retrofit.Builder()
+                .baseUrl(ApiSeksi.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiSeksi = retrofit.create(ApiSeksi.class);
+        Rafresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                TampilkanSurat();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Rafresh.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        RV_Seksi.removeAllViewsInLayout();
+        RV_Seksi.removeAllViewsInLayout();
+        TampilkanSurat();
+    }
+
+    private void TampilkanSurat(){
+        Call<ResponDisposisiKadis> call = apiSeksi.getData(NamaBidang,NamaSub);
+        call.enqueue(new Callback<ResponDisposisiKadis>() {
+            @Override
+            public void onResponse(Call<ResponDisposisiKadis> call, Response<ResponDisposisiKadis> response) {
+                RV_Adapter_Seksi RV_adapter = new RV_Adapter_Seksi(Seksi.this, response.body().getDataSurat());
+                RV_Seksi.setLayoutManager(new LinearLayoutManager(Seksi.this));
+                RV_Seksi.setAdapter(RV_adapter);
+            }
+
+            @Override
+            public void onFailure(Call<ResponDisposisiKadis> call, Throwable t) {
+
+            }
+        });
+    }
