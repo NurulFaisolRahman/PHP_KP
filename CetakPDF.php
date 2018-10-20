@@ -82,29 +82,30 @@
 				<td colspan="4" style=" padding: 5px; height: vertical-align: top;"><? echo $perihal; ?></td>
 			</tr>
 			<tr>
-				<td colspan="3" style="padding: 5px;">Diteruskan kepada sdr. : </td>
-				<td colspan="3" style="text-align: center;">ISI DISPOSISI : </td>
+				<td colspan="2" style="padding: 5px;">Diteruskan <br>kepada sdr. : </td>
+				<td colspan="4" style="text-align: center;">ISI DISPOSISI : </td>
 			</tr>
 			<tr>
-				<td colspan="3" style="padding: 5px; height: 70px; vertical-align: top; "><?php 
+				<td colspan="2" style="padding: 5px; height: 70px; vertical-align: top; "><?php 
 						foreach ($NamaBidang as $data) {
 							if ($data == "sekretaris") {
-								echo "Bidang Sekretaris"."<br>";
+								echo "Sekretaris"."<br>";
 							} 
 							else if ($data == "ikp") {
-								echo "Bidang IKP"."<br>";
+								echo "IKP"."<br>";
 							} 
 							else if ($data == "aptika") {
-								echo "Bidang Aplikasi dan Informatika"."<br>";
+								echo "Aplikasi dan Informatika"."<br>";
 							}
 							else if ($data == "sdtik") {
-								echo "Bidang SD-TIK"."<br>";
+								echo "SD-TIK"."<br>";
 							}
 						}
 					 ?>	
 				</td>
-				<td colspan="3" rowspan="4" style="vertical-align: top; padding: 5px;"><?php 
-					 echo $isi."<br>"."<img src='logo.jpg' style='width: 50px;height: 50px;'>".$tanggal_disposisi; ?>	</td>
+				<td rowspan="4" style="vertical-align: top; padding: 5px;border: none;"><?php 
+					 echo $isi."<br>"."<img src='logo.jpg' style='width: 50px;height: 50px;'><br>".$tanggal_disposisi; ?>	
+				</td>
 			</tr>
 		</table>
 	</form>

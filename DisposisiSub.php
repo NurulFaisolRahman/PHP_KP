@@ -4,51 +4,65 @@
 	$SubBidang = $_GET["SubBidang"];
 	$NamaBidang = $_GET["NamaBidang"];
 	$BidangTujuan = explode("/", $SubBidang);
-	$sub1=$sub2=$sub3="";
+	$sub = array();
 	foreach ($BidangTujuan as $NamaKolom) {
 		if($NamaKolom == "spkp"){
-			$sub1 = "spkp";
+			array_push($sub, "spkp");
 		}else if($NamaKolom == "spip"){
-			$sub2 = "spip";
+			array_push($sub, "spip");
 		}else if($NamaKolom == "spmk"){
-			$sub3 = "spmk";
+			array_push($sub, "spmk");
 		}else if($NamaKolom == "sst"){
-			$sub1 = "sst";
+			array_push($sub, "sst");
 		}else if($NamaKolom == "set"){
-			$sub2 = "set";
+			array_push($sub, "set");
 		}else if($NamaKolom == "sds"){
-			$sub3 = "sds";
+			array_push($sub, "sds");
 		}else if($NamaKolom == "skp"){
-			$sub1 = "skp";
+			array_push($sub, "skp");
 		}else if($NamaKolom == "spe"){
-			$sub2 = "spe";
+			array_push($sub, "spe");
 		}else if($NamaKolom == "sijt"){
-			$sub3 = "sijt";
+			array_push($sub, "sijt");
+		}else if($NamaKolom == "spk"){
+			array_push($sub, "spk");
+		}else if($NamaKolom == "suk"){
+			array_push($sub, "suk");
+		}else if($NamaKolom == "ikp"){
+			array_push($sub, "ikp");
+		}else if($NamaKolom == "aptika"){
+			array_push($sub, "aptika");
+		}else if($NamaKolom == "sdtik"){
+			array_push($sub, "sdtik");
 		}
 	}
 
 	if(sizeof($BidangTujuan)==1){
-		if (!empty($sub1)) {
-			$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub1`) values ('$NomorSurat', 'Disposisi', '0');";
-		} 
-		else if (!empty($sub2)) {
-			$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub2`) values ('$NomorSurat', 'Disposisi', '0');";
-		}
-		else if (!empty($sub3)) {
-			$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub3`) values ('$NomorSurat', 'Disposisi', '0');";
-		} 
+		$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub[0]`) values ('$NomorSurat', 'Disposisi', '0');";
 	}else if(sizeof($BidangTujuan)==2){
-		if (empty($sub3)) {
-			$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub1`, `$sub2`) values ('$NomorSurat', 'Disposisi', '0', '0');";
-		}
-		else if (empty($sub2)) {
-			$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub1`, `$sub3`) values ('$NomorSurat', 'Disposisi', '0', '0');";
-		}
-		else if (empty($sub1)) {
-			$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub2`, `$sub3`) values ('$NomorSurat', 'Disposisi', '0', '0');";
-		}
+		$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub[0]`, `$sub[1]`) values ('$NomorSurat', 'Disposisi', '0', '0');";
 	}else if(sizeof($BidangTujuan)==3){
-		$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub1`, `$sub2`, `$sub3`) values ('$NomorSurat', 'Disposisi', '0', '0', '0');";
+		$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub[0]`, `$sub[1]`, `$sub[2]`) values ('$NomorSurat', 'Disposisi', '0', '0', '0');";
+	}
+	else if(sizeof($BidangTujuan)==4){
+		$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub[0]`, `$sub[1]`, `$sub[2]`, `$sub[3]`) values ('$NomorSurat', 'Disposisi', '0', '0', '0', '0');";
+	}
+	else if(sizeof($BidangTujuan)==5){
+		$sql = "insert into `$NamaBidang` (`nomor_surat`, `status`, `$sub[0]`, `$sub[1]`, `$sub[2]`, `$sub[3]`, `$sub[4]`) values ('$NomorSurat', 'Disposisi', '0', '0', '0', '0', '0');";
+	}
+	if ($NamaBidang == "sekretaris") {
+		$Bidang = "select bidang from surat where nomor_surat = '$NomorSurat'";
+		$DataBidang = mysqli_query($koneksi,$Bidang);
+		$Data = $DataBidang->fetch_object()->bidang;
+		$PecahBidang = explode("/", $Data);
+		$ArrayBidang = array("sekretaris","ikp","aptika","sdtik");
+		foreach ($sub as $data) {
+			if (in_array($data, $ArrayBidang) && !in_array($data, $PecahBidang)) {
+				$Data .= "/".$data;
+			}
+		}
+		$update = "UPDATE surat SET bidang = '$Data'";
+		mysqli_query($koneksi,$update);
 	}
 	if(mysqli_query($koneksi,$sql)){
 		echo json_encode(array("respon" => "sukses"));

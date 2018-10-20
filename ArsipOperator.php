@@ -5,6 +5,11 @@
 	while($BarisData = mysqli_fetch_assoc($hasil)){
 		$Data[] = $BarisData;
 	}
-	echo json_encode($Data);
+	if (empty($Data)) {
+		echo json_encode(array("respon" => "gagal", "data" => null));
+	} 
+	else {
+		echo json_encode(array("respon" => "sukses", "data" => $Data));
+	}
 	mysqli_close($koneksi);
  ?>
