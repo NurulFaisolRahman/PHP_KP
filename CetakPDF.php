@@ -103,8 +103,21 @@
 						}
 					 ?>	
 				</td>
-				<td rowspan="4" style="vertical-align: top; padding: 5px;border: none;"><?php 
-					 echo $isi."<br>"."<img src='logo.jpg' style='width: 50px;height: 50px;'><br>".$tanggal_disposisi; ?>	
+				<td colspan="4" style="vertical-align: top; padding: 5px;border: none;"><table>
+						<tr>
+							<td><?php 
+					 				echo $isi."<br>"."<img src='logo.jpg' style='width: 50px;height: 50px;'><br>"."Kadis<br>".$tanggal_disposisi 
+					 			?>	
+							</td>
+							<?php 
+								foreach ($NamaBidang as $data) {
+									echo "<td style='width:70px;'>";
+									echo "<br>"."<img src='logo.jpg' style='width: 50px;height: 50px;'><br>".$data;
+									echo "</td>";
+								}
+							 ?>
+						</tr>
+					</table>
 				</td>
 			</tr>
 		</table>

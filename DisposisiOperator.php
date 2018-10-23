@@ -8,7 +8,11 @@
 	$sifat = $_GET['sifat'];
 	$perihal = $_GET['perihal'];
 	$sql = "INSERT INTO `surat` (`nomor_surat`, `surat_dari`,`tanggal_surat` ,`diterima_tanggal`,`nomor_agenda`,`sifat`,`perihal`) VALUES ('$nomor_surat', '$surat_dari', '$tanggal_surat','$diterima_tanggal','$nomor_agenda','$sifat','$perihal');";
-	$hasil = mysqli_query($koneksi,$sql);
-	echo json_encode(array("respon" => "sukses"));
+	if (mysqli_query($koneksi,$sql)) {
+		echo json_encode(array("respon" => "sukses"));
+	}
+	else {
+		echo json_encode(array("respon" => "gagal"));
+	}
 	mysqli_close($koneksi);
  ?>
